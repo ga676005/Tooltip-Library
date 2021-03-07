@@ -23,6 +23,7 @@ const POSITION_TO_FUNCTION_MAP = {
 }
 const ARROW_STYLE = "2px solid rebeccapurple"
 
+//定位tooltip用的container
 const tooltipContainer = document.createElement("div")
 tooltipContainer.classList.add("tooltip-container")
 document.body.append(tooltipContainer)
@@ -111,20 +112,30 @@ function positionTooltipTop(tooltip, elementRect, spacing) {
   positionTooltipArrow("bottom", tooltip, spacing)
 
   if (bounds.right) {
+    //tooltip右邊超出範圍，把右邊位置拉進範圍
     tooltip.style.right = `${spacing}px`
+    //消除一開始定位tooltip所設的left值
     tooltip.style.left = "initial"
+
+    //調整tooltip箭頭位置
     tooltip.style.setProperty(
       "--left",
-      `${tooltipRect.width - elementRect.width / 2}px`
+      `${tooltipRect.width - elementRect.width + spacing}px`
     )
+
+    //處理因為重設右邊位置造成左邊超出邊界的狀況
     if (isLessThanSpacing(tooltip, "left", spacing)) {
       tooltip.style.left = `${spacing}px`
     }
   }
 
   if (bounds.left) {
+    //tooltip左邊超出範圍，把左邊位置拉近範圍
     tooltip.style.left = `${spacing}px`
-    tooltip.style.setProperty("--left", `${elementRect.width / 2}px`)
+    //調整tooltip箭頭位置
+    tooltip.style.setProperty("--left", `${elementRect.width - spacing}px`)
+
+    //處理因為重設左邊位置而造成右邊超出邊界的狀況
     if (isLessThanSpacing(tooltip, "right", spacing)) {
       tooltip.style.right = `${spacing}px`
     }
@@ -161,7 +172,7 @@ function positionTooltipBottom(tooltip, elementRect, spacing) {
     tooltip.style.left = "initial"
     tooltip.style.setProperty(
       "--left",
-      `${tooltipRect.width - elementRect.width / 2}px`
+      `${tooltipRect.width - elementRect.width + spacing}px`
     )
     if (isLessThanSpacing(tooltip, "left", spacing)) {
       tooltip.style.left = `${spacing}px`
@@ -170,7 +181,7 @@ function positionTooltipBottom(tooltip, elementRect, spacing) {
 
   if (bounds.left) {
     tooltip.style.left = `${spacing}px`
-    tooltip.style.setProperty("--left", `${elementRect.width / 2}px`)
+    tooltip.style.setProperty("--left", `${elementRect.width - spacing}px`)
     if (isLessThanSpacing(tooltip, "right", spacing)) {
       tooltip.style.right = `${spacing}px`
     }
@@ -377,7 +388,7 @@ function resetTooltipArrowPosition(tooltip) {
 }
 
 /**
- * 定位tooltip箭頭的位置
+ * 定位tooltip箭頭的位置和設定樣式
  * @param {Array} position 從positionTooltipArrow傳下來的position array
  * @param {Element} tooltip
  * @param {Number} spacing
