@@ -12,7 +12,6 @@ const POSITION_TO_FUNCTION_MAP = {
   left: positionTooltipLeft,
   right: positionTooltipRight
 }
-const ARROW_STYLE = '2px solid rebeccapurple'
 
 //定位tooltip用的container
 const tooltipContainer = document.createElement('div')
@@ -27,16 +26,12 @@ addGlobalEventListener('mouseover', '[data-tooltip]', (e) => {
   const tooltip = tooltipContainer.children[0]
   const { bgColor, fgColor, fontSize, arrowSize, spacing } = e.target.dataset
 
-  console.log(tooltip)
-
-  //style tooltip
+  //tooltip style
   tooltipContainer.style.setProperty('--tooltip-bg-clr', bgColor)
   tooltipContainer.style.setProperty('--tooltip-fg-clr', fgColor)
   tooltipContainer.style.setProperty('--tooltip-fs', fontSize)
   tooltipContainer.style.setProperty('--tooltip-arrow-fs', arrowSize)
   tooltipContainer.style.setProperty('--tooltip-spacing', `${spacing / 50}rem`)
-
-
 
   positionTooltip(tooltip, e.target)
 
@@ -50,6 +45,18 @@ addGlobalEventListener('mouseover', '[data-tooltip]', (e) => {
 })
 
 function creatTooltipHTML(text) {
+  return `
+  <div class="tooltip-outer">
+    <div class="tooltip">${text}</div>
+    <div class="tooltip-arrow tooltip-arrow-top ">&#10148;</div>
+    <div class="tooltip-arrow tooltip-arrow-right">&#10148;</div>
+    <div class="tooltip-arrow tooltip-arrow-bottom">&#10148;</div>
+    <div class="tooltip-arrow tooltip-arrow-left">&#10148;</div>
+    <div class="tooltip-arrow tooltip-arrow-bottom-left">&#10148;</div>
+    <div class="tooltip-arrow tooltip-arrow-top-right">&#10148;</div>
+    <div class="tooltip-arrow tooltip-arrow-top-left">&#10148;</div>
+    <div class="tooltip-arrow tooltip-arrow-bottom-right">&#10148;</div>
+  </div>`
   return `
   <div class="tooltip-outer">
     <div class="tooltip">哈哈成功囉哈哈成功囉哈哈成功囉哈哈成功囉</div>
@@ -359,6 +366,6 @@ function positionTooltipBottomLeft(tooltip, elementRect, spacing) {
 
 function positionTooltipArrow(direction) {
   const arrow = tooltipContainer.querySelector(`.tooltip-arrow-${direction}`)
-  arrow.classList.add('show')
+  arrow.classList.add('animate-tooltip')
 }
 

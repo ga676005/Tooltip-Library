@@ -1,3 +1,8 @@
+:root {
+  --tooltip-base-fs: 1rem;
+  --tooltip-width: 18ch;
+  --tooltip-padding: 0.3em;
+}
 * {
   box-sizing: border-box;
 }
@@ -43,7 +48,7 @@ body {
   border-bottom: 3px dotted blue;
 }
 
-.tooltip-container {
+/* .tooltip-container {
   position: fixed;
   pointer-events: none;
   margin: 0;
@@ -54,7 +59,7 @@ body {
 }
 
 .tooltip {
-  padding: 0.4rem 0.5rem;
+  padding: 0.3em;
   border-radius: 0.25rem;
   font-size: var(--tooltip-fs, 0.75rem);
   max-width: 150px;
@@ -113,4 +118,120 @@ body {
 }
 .tooltip-arrow-bottom-right {
   grid-area: br;
+} */
+
+/* nnnnnnnnnnnnnnnnnnnnnnnn */
+
+.tooltip-container {
+  position: fixed;
+  pointer-events: none;
+  margin: 0;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
+.tooltip {
+  font-size: var(--tooltip-fs, var(--tooltip-base-fs));
+  padding: var(--tooltip-padding);
+  max-width: var(--tooltip-width);
+  border-radius: 0.25rem;
+  background-color: var(--tooltip-bg-clr, rgb(255, 255, 255));
+  color: var(--tooltip-fg-clr, rgba(17, 17, 17, 0.87));
+  box-shadow: 0px 0px 5px rgba(1, 1, 1, 0.2), 0px 0px 5px var(--tooltip-bg-clr);
+  font-weight: 300;
+  border: 2px solid black;
+  border-image: linear-gradient(-25deg, var(--tooltip-bg-clr), var(--tooltip-fg-clr)) 1;
+  filter: drop-shadow(5px 10px 5px rgba(0, 0, 0, 0.5));
+}
+
+.tooltip-outer {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: fit-content;
+  grid-template-columns: auto minmax(50px, auto) auto;
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    'tl t tr'
+    'l  m  r'
+    'bl b br';
+  z-index: 0;
+  gap: var(--tooltip-spacing);
+}
+
+.tooltip-arrow {
+  font-size: var(--tooltip-arrow-fs);
+  font-weight: 900;
+  z-index: -1;
+  color: var(--tooltip-bg-clr);
+  filter: drop-shadow(5px 5px 2px rgba(0, 0, 0, 0.5));
+}
+
+.tooltip-arrow {
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-repeat: no-repeat;
+  background-size: 200px 200px;
+  background-position-x: -200px;
+
+  background-image: linear-gradient(
+    -90deg,
+    transparent,
+    var(--tooltip-bg-clr) 30% 70%,
+    transparent
+  );
+
+  animation: flashArrow 3s infinite normal;
+  animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  animation-play-state: paused;
+}
+
+.animate-tooltip {
+  animation-play-state: running;
+}
+
+.tooltip-arrow-top {
+  grid-area: t;
+  transform: rotate(-90deg);
+}
+.tooltip-arrow-right {
+  grid-area: r;
+  transform: rotate(0deg);
+}
+.tooltip-arrow-bottom {
+  grid-area: b;
+  transform: rotate(90deg);
+}
+.tooltip-arrow-left {
+  grid-area: l;
+  transform: rotate(180deg);
+}
+
+.tooltip-arrow-bottom-left {
+  grid-area: bl;
+  transform: rotate(135deg);
+}
+.tooltip-arrow-top-right {
+  grid-area: tr;
+  transform: rotate(-45deg);
+}
+.tooltip-arrow-top-left {
+  grid-area: tl;
+  transform: rotate(-135deg);
+}
+.tooltip-arrow-bottom-right {
+  grid-area: br;
+  transform: rotate(45deg);
+}
+
+@keyframes flashArrow {
+  0% {
+    background-position-x: -200px;
+  }
+  100% {
+    background-position-x: 50px;
+  }
 }
