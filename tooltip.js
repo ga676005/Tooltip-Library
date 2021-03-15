@@ -21,17 +21,9 @@ document.body.append(tooltipContainer)
 addGlobalEventListener('mouseover', '[data-tooltip]', (e) => {
   if (e.target.dataset.tooltip.trim() === '') return
 
-  tooltipContainer.innerHTML = creatTooltipHTML(e.target.dataset.tooltip)
-
+  tooltipContainer.innerHTML = creatTooltipHTML(e.target.dataset)
   const tooltip = tooltipContainer.children[0]
-  const { bgColor, fgColor, fontSize, arrowSize, spacing } = e.target.dataset
-
-  //tooltip style
-  tooltipContainer.style.setProperty('--tooltip-bg-clr', bgColor)
-  tooltipContainer.style.setProperty('--tooltip-fg-clr', fgColor)
-  tooltipContainer.style.setProperty('--tooltip-fs', fontSize)
-  tooltipContainer.style.setProperty('--tooltip-arrow-fs', arrowSize)
-  tooltipContainer.style.setProperty('--tooltip-spacing', `${spacing / 50}rem`)
+  setupTooltipStyle(tooltip)
 
   positionTooltip(tooltip, e.target)
 
@@ -44,30 +36,18 @@ addGlobalEventListener('mouseover', '[data-tooltip]', (e) => {
   )
 })
 
-function creatTooltipHTML(text) {
+function creatTooltipHTML({ tooltip, arrow = "&#10148;" } = {}) {
   return `
   <div class="tooltip-outer">
-    <div class="tooltip">${text}</div>
-    <div class="tooltip-arrow tooltip-arrow-top ">&#10148;</div>
-    <div class="tooltip-arrow tooltip-arrow-right">&#10148;</div>
-    <div class="tooltip-arrow tooltip-arrow-bottom">&#10148;</div>
-    <div class="tooltip-arrow tooltip-arrow-left">&#10148;</div>
-    <div class="tooltip-arrow tooltip-arrow-bottom-left">&#10148;</div>
-    <div class="tooltip-arrow tooltip-arrow-top-right">&#10148;</div>
-    <div class="tooltip-arrow tooltip-arrow-top-left">&#10148;</div>
-    <div class="tooltip-arrow tooltip-arrow-bottom-right">&#10148;</div>
-  </div>`
-  return `
-  <div class="tooltip-outer">
-    <div class="tooltip">哈哈成功囉哈哈成功囉哈哈成功囉哈哈成功囉</div>
-    <div class="tooltip-arrow tooltip-arrow-top ">&uharr;</div>
-    <div class="tooltip-arrow tooltip-arrow-right">&rhard;</div>
-    <div class="tooltip-arrow tooltip-arrow-bottom">&dharl;</div>
-    <div class="tooltip-arrow tooltip-arrow-left">&lharu;</div>
-    <div class="tooltip-arrow tooltip-arrow-bottom-left">&swarr;</div>
-    <div class="tooltip-arrow tooltip-arrow-top-right">&nearr;</div>
-    <div class="tooltip-arrow tooltip-arrow-top-left">&nwarr;</div>
-    <div class="tooltip-arrow tooltip-arrow-bottom-right">&searr;</div>
+    <div class="tooltip">${tooltip}</div>
+    <div class="tooltip-arrow tooltip-arrow-top ">${arrow}</div>
+    <div class="tooltip-arrow tooltip-arrow-right">${arrow}</div>
+    <div class="tooltip-arrow tooltip-arrow-bottom">${arrow}</div>
+    <div class="tooltip-arrow tooltip-arrow-left">${arrow}</div>
+    <div class="tooltip-arrow tooltip-arrow-bottom-left">${arrow}</div>
+    <div class="tooltip-arrow tooltip-arrow-top-right">${arrow}</div>
+    <div class="tooltip-arrow tooltip-arrow-top-left">${arrow}</div>
+    <div class="tooltip-arrow tooltip-arrow-bottom-right">${arrow}</div>
   </div>`
 }
 
@@ -79,7 +59,7 @@ function creatTooltipHTML(text) {
 function positionTooltip(tooltip, element) {
   const elementRect = element.getBoundingClientRect()
   const preferredPositions = (element.dataset.positions || '').split('|')
-  const spacing = parseInt(element.dataset.spacing) ?? DEFAULT_SPACING
+  const spacing = element.dataset.spacing ? parseInt(element.dataset.spacing) : DEFAULT_SPACING
   const positions = [...preferredPositions, ...POSITION_ORDER]
 
   //找對應的定位function執行
@@ -369,3 +349,12 @@ function positionTooltipArrow(direction) {
   arrow.classList.add('animate-tooltip')
 }
 
+function setupTooltipStyle(element) {
+  const { bgColor = "#fff", fgColor = "#000", fontSize = "1rem", arrowSize = "1.5rem", spacing = "0" } = element.dataset
+
+  tooltipContainer.style.setProperty('--tooltip-bg-clr', bgColor)
+  tooltipContainer.style.setProperty('--tooltip-fg-clr', fgColor)
+  tooltipContainer.style.setProperty('--tooltip-fs', fontSize)
+  tooltipContainer.style.setProperty('--tooltip-arrow-fs', arrowSize)
+  tooltipContainer.style.setProperty('--tooltip-spacing', `${spacing / 50}rem`)
+}

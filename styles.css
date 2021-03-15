@@ -48,80 +48,6 @@ body {
   border-bottom: 3px dotted blue;
 }
 
-/* .tooltip-container {
-  position: fixed;
-  pointer-events: none;
-  margin: 0;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-}
-
-.tooltip {
-  padding: 0.3em;
-  border-radius: 0.25rem;
-  font-size: var(--tooltip-fs, 0.75rem);
-  max-width: 150px;
-  background-color: var(--tooltip-bg-clr, rgb(240, 240, 240));
-  color: var(--tooltip-fg-clr, rgba(17, 17, 17, 0.87));
-  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2), 0px 0px 5px var(--tooltip-bg-clr);
-}
-
-.tooltip-outer {
-  position: absolute;
-  display: grid;
-  place-items: center;
-  width: fit-content;
-  grid-template-columns: auto minmax(50px, auto) auto;
-  grid-template-rows: auto auto auto;
-  grid-template-areas:
-    'tl t tr'
-    'l  m  r'
-    'bl b br';
-  z-index: 0;
-  gap: var(--tooltip-spacing);
-}
-
-.tooltip-arrow {
-  font-size: var(--tooltip-arrow-fs);
-  z-index: -1;
-  opacity: 0;
-}
-.tooltip-arrow.show {
-  opacity: 1;
-}
-
-.tooltip {
-  grid-area: m;
-}
-.tooltip-arrow-top {
-  grid-area: t;
-}
-.tooltip-arrow-right {
-  grid-area: r;
-}
-.tooltip-arrow-bottom {
-  grid-area: b;
-}
-.tooltip-arrow-left {
-  grid-area: l;
-}
-.tooltip-arrow-bottom-left {
-  grid-area: bl;
-}
-.tooltip-arrow-top-right {
-  grid-area: tr;
-}
-.tooltip-arrow-top-left {
-  grid-area: tl;
-}
-.tooltip-arrow-bottom-right {
-  grid-area: br;
-} */
-
-/* nnnnnnnnnnnnnnnnnnnnnnnn */
-
 .tooltip-container {
   position: fixed;
   pointer-events: none;
@@ -139,11 +65,26 @@ body {
   border-radius: 0.25rem;
   background-color: var(--tooltip-bg-clr, rgb(255, 255, 255));
   color: var(--tooltip-fg-clr, rgba(17, 17, 17, 0.87));
-  box-shadow: 0px 0px 5px rgba(1, 1, 1, 0.2), 0px 0px 5px var(--tooltip-bg-clr);
   font-weight: 300;
-  border: 2px solid black;
-  border-image: linear-gradient(-25deg, var(--tooltip-bg-clr), var(--tooltip-fg-clr)) 1;
-  filter: drop-shadow(5px 10px 5px rgba(0, 0, 0, 0.5));
+
+  position: relative;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  background: linear-gradient(var(--tooltip-bg-clr) 0% 100%);
+  background-clip: padding-box;
+  box-shadow: 2px 3px 4px 0px rgba(0, 0, 0, 0.53);
+}
+
+.tooltip::after {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: -2px;
+  right: -2px;
+  background: linear-gradient(45deg, var(--tooltip-bg-clr), var(--tooltip-fg-clr));
+  content: '';
+  z-index: -1;
+  border-radius: 5px;
 }
 
 .tooltip-outer {
@@ -180,12 +121,14 @@ body {
   background-image: linear-gradient(
     -90deg,
     transparent,
-    var(--tooltip-bg-clr) 30% 70%,
+    var(--tooltip-bg-clr) 20% 80%,
     transparent
   );
 
-  animation: flashArrow 3s infinite normal;
-  animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  animation-duration: 2.5s;
+  animation-iteration-count: infinite;
+  animation-duration: normal;
+  animation-timing-function: cubic-bezier(0, 0, 0.2, 1) ease-in-out;
   animation-play-state: paused;
 }
 
@@ -194,35 +137,43 @@ body {
 }
 
 .tooltip-arrow-top {
+  animation-name: flashArrow, move-arrow-top;
   grid-area: t;
   transform: rotate(-90deg);
 }
 .tooltip-arrow-right {
+  animation-name: flashArrow, move-arrow-right;
   grid-area: r;
   transform: rotate(0deg);
 }
 .tooltip-arrow-bottom {
+  animation-name: flashArrow, move-arrow-bottom;
   grid-area: b;
   transform: rotate(90deg);
 }
 .tooltip-arrow-left {
+  animation-name: flashArrow, move-arrow-left;
   grid-area: l;
   transform: rotate(180deg);
 }
 
 .tooltip-arrow-bottom-left {
+  animation-name: flashArrow, move-arrow-bottom-left;
   grid-area: bl;
   transform: rotate(135deg);
 }
 .tooltip-arrow-top-right {
+  animation-name: flashArrow, move-arrow-top-right;
   grid-area: tr;
   transform: rotate(-45deg);
 }
 .tooltip-arrow-top-left {
+  animation-name: flashArrow, move-arrow-top-left;
   grid-area: tl;
   transform: rotate(-135deg);
 }
 .tooltip-arrow-bottom-right {
+  animation-name: flashArrow, move-arrow-bottom-right;
   grid-area: br;
   transform: rotate(45deg);
 }
@@ -233,5 +184,70 @@ body {
   }
   100% {
     background-position-x: 50px;
+  }
+}
+
+@keyframes move-arrow-top {
+  0% {
+    transform: rotate(-90deg) translateX(-30%);
+  }
+  100% {
+    transform: rotate(-90deg) translateX(30%);
+  }
+}
+@keyframes move-arrow-right {
+  0% {
+    transform: rotate(0deg) translateX(-50%);
+  }
+  100% {
+    transform: rotate(0deg) translateX(30%);
+  }
+}
+@keyframes move-arrow-bottom {
+  0% {
+    transform: rotate(90deg) translateX(-50%);
+  }
+  100% {
+    transform: rotate(90deg) translateX(30%);
+  }
+}
+@keyframes move-arrow-left {
+  0% {
+    transform: rotate(180deg) translateX(-50%);
+  }
+  100% {
+    transform: rotate(180deg) translateX(30%);
+  }
+}
+@keyframes move-arrow-bottom-left {
+  0% {
+    transform: rotate(135deg) translateX(-50%);
+  }
+  100% {
+    transform: rotate(135deg) translateX(30%);
+  }
+}
+@keyframes move-arrow-top-right {
+  0% {
+    transform: rotate(-45deg) translateX(-50%);
+  }
+  100% {
+    transform: rotate(-45deg) translateX(30%);
+  }
+}
+@keyframes move-arrow-top-left {
+  0% {
+    transform: rotate(-135deg) translateX(-50%);
+  }
+  100% {
+    transform: rotate(-135deg) translateX(30%);
+  }
+}
+@keyframes move-arrow-bottom-right {
+  0% {
+    transform: rotate(45deg) translateX(-50%);
+  }
+  100% {
+    transform: rotate(45deg) translateX(30%);
   }
 }
