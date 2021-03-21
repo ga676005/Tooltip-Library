@@ -23,14 +23,13 @@ addGlobalEventListener('mouseover', '[data-tooltip]', (e) => {
 
   tooltipContainer.innerHTML = creatTooltipHTML(e.target.dataset)
   const tooltip = tooltipContainer.children[0]
-  setupTooltipStyle(tooltip)
-
   positionTooltip(tooltip, e.target)
+  setupTooltipStyle(e.target)
 
   e.target.addEventListener(
     'mouseleave',
     () => {
-      // tooltip.remove()
+      tooltip.remove()
     },
     { once: true }
   )
@@ -350,11 +349,23 @@ function positionTooltipArrow(direction) {
 }
 
 function setupTooltipStyle(element) {
-  const { bgColor = "#fff", fgColor = "#000", fontSize = "1rem", arrowSize = "1.5rem", spacing = "0" } = element.dataset
+  const { bgColor = "#ffffff", fgColor = "#000000", fontSize = "1rem", arrowSize = "1.5rem", spacing = "0", arrowDirection } = element.dataset
+  const ARROW_ROTATE_DEGREE = {
+    up: "90deg",
+    down: "270deg",
+    right: "0deg",
+    left: "180deg"
+  }
+  const degree = ARROW_ROTATE_DEGREE[arrowDirection]
+  const start = `var(--arrow-${arrowDirection}-translate-start)`
+  const end = `var(--arrow-${arrowDirection}-translate-end)`
 
   tooltipContainer.style.setProperty('--tooltip-bg-clr', bgColor)
   tooltipContainer.style.setProperty('--tooltip-fg-clr', fgColor)
   tooltipContainer.style.setProperty('--tooltip-fs', fontSize)
   tooltipContainer.style.setProperty('--tooltip-arrow-fs', arrowSize)
+  tooltipContainer.style.setProperty('--tooltip-base-rotation', degree)
   tooltipContainer.style.setProperty('--tooltip-spacing', `${spacing / 50}rem`)
+  tooltipContainer.style.setProperty('--arrow-translate-start', start)
+  tooltipContainer.style.setProperty('--arrow-translate-end', end)
 }

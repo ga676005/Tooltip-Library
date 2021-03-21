@@ -2,6 +2,18 @@
   --tooltip-base-fs: 1rem;
   --tooltip-width: 18ch;
   --tooltip-padding: 0.3em;
+  --tooltip-base-rotation: 180deg;
+  --arrow-right-translate-start: translateX(-50%);
+  --arrow-right-translate-end: translateX(30%);
+  --arrow-up-translate-start: translateY(50%);
+  --arrow-up-translate-end: translateY(-30%);
+  --arrow-down-translate-start: translateY(-50%);
+  --arrow-down-translate-end: translateY(30%);
+  --arrow-left-translate-start: translateX(50%);
+  --arrow-left-translate-end: translateX(-30%);
+
+  --arrow-translate-start: var(--arrow-left-translate-start);
+  --arrow-translate-end: var(--arrow-left-translate-end);
 }
 * {
   box-sizing: border-box;
@@ -139,43 +151,43 @@ body {
 .tooltip-arrow-top {
   animation-name: flashArrow, move-arrow-top;
   grid-area: t;
-  transform: rotate(-90deg);
+  transform: rotate(calc(var(--tooltip-base-rotation) + 270deg));
 }
 .tooltip-arrow-right {
   animation-name: flashArrow, move-arrow-right;
   grid-area: r;
-  transform: rotate(0deg);
+  transform: rotate(calc(var(--tooltip-base-rotation) + 0deg));
 }
 .tooltip-arrow-bottom {
   animation-name: flashArrow, move-arrow-bottom;
   grid-area: b;
-  transform: rotate(90deg);
+  transform: rotate(calc(var(--tooltip-base-rotation) + 90deg));
 }
 .tooltip-arrow-left {
   animation-name: flashArrow, move-arrow-left;
   grid-area: l;
-  transform: rotate(180deg);
+  transform: rotate(calc(var(--tooltip-base-rotation) + 180deg));
 }
 
 .tooltip-arrow-bottom-left {
   animation-name: flashArrow, move-arrow-bottom-left;
   grid-area: bl;
-  transform: rotate(135deg);
+  transform: rotate(calc(var(--tooltip-base-rotation) + 135deg));
 }
 .tooltip-arrow-top-right {
   animation-name: flashArrow, move-arrow-top-right;
   grid-area: tr;
-  transform: rotate(-45deg);
+  transform: rotate(calc(var(--tooltip-base-rotation) + 315deg));
 }
 .tooltip-arrow-top-left {
   animation-name: flashArrow, move-arrow-top-left;
   grid-area: tl;
-  transform: rotate(-135deg);
+  transform: rotate(calc(var(--tooltip-base-rotation) + 225deg));
 }
 .tooltip-arrow-bottom-right {
   animation-name: flashArrow, move-arrow-bottom-right;
   grid-area: br;
-  transform: rotate(45deg);
+  transform: rotate(calc(var(--tooltip-base-rotation) + 45deg));
 }
 
 @keyframes flashArrow {
@@ -189,65 +201,65 @@ body {
 
 @keyframes move-arrow-top {
   0% {
-    transform: rotate(-90deg) translateX(-30%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 270deg)) var(--arrow-translate-start);
   }
   100% {
-    transform: rotate(-90deg) translateX(30%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 270deg)) var(--arrow-translate-end);
   }
 }
 @keyframes move-arrow-right {
   0% {
-    transform: rotate(0deg) translateX(-50%);
+    transform: rotate(var(--tooltip-base-rotation)) var(--arrow-translate-start);
   }
   100% {
-    transform: rotate(0deg) translateX(30%);
+    transform: rotate(var(--tooltip-base-rotation)) var(--arrow-translate-end);
   }
 }
 @keyframes move-arrow-bottom {
   0% {
-    transform: rotate(90deg) translateX(-50%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 90deg)) var(--arrow-translate-start);
   }
   100% {
-    transform: rotate(90deg) translateX(30%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 90deg)) var(--arrow-translate-end);
   }
 }
 @keyframes move-arrow-left {
   0% {
-    transform: rotate(180deg) translateX(-50%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 180deg)) var(--arrow-translate-start);
   }
   100% {
-    transform: rotate(180deg) translateX(30%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 180deg)) var(--arrow-translate-end);
   }
 }
 @keyframes move-arrow-bottom-left {
   0% {
-    transform: rotate(135deg) translateX(-50%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 135deg)) var(--arrow-translate-start);
   }
   100% {
-    transform: rotate(135deg) translateX(30%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 135deg)) var(--arrow-translate-end);
   }
 }
 @keyframes move-arrow-top-right {
   0% {
-    transform: rotate(-45deg) translateX(-50%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 315deg)) var(--arrow-translate-start);
   }
   100% {
-    transform: rotate(-45deg) translateX(30%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 315deg)) var(--arrow-translate-end);
   }
 }
 @keyframes move-arrow-top-left {
   0% {
-    transform: rotate(-135deg) translateX(-50%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 225deg)) var(--arrow-translate-start);
   }
   100% {
-    transform: rotate(-135deg) translateX(30%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 225deg)) var(--arrow-translate-end);
   }
 }
 @keyframes move-arrow-bottom-right {
   0% {
-    transform: rotate(45deg) translateX(-50%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 45deg)) var(--arrow-translate-start);
   }
   100% {
-    transform: rotate(45deg) translateX(30%);
+    transform: rotate(calc(var(--tooltip-base-rotation) + 45deg)) var(--arrow-translate-end);
   }
 }
