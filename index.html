@@ -6,14 +6,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
 
 <body>
   <div class="container x-center y-center">
-    <span data-spacing="0" data-positions="" data-tooltip="嗨!" data-bg-color="hsl(220,100%,21%)" data-fg-color="hsl(120,100%,91%)" data-font-size="1.5rem" data-arrow-size="2rem" data-arrow="&uHar;" data-arrow-direction="up" class="help-text">Hover Me.</span>
+    <span data-spacing="0" data-positions="topRight|bottomLeft|right" data-tooltip="Hi, I'm Gohomewho. It's my pleasure to have your visit. Have a great day.😉" data-bg-color="hsl(200,100%,21%)" data-fg-color="hsl(20,100%,91%)" data-font-size="1.5rem" data-arrow-size="2rem" data-arrow="&uHar;" data-arrow-direction="up" class="help-text">
+      Hover <img class="settings" src="./settings.svg" alt=""> Me.
+    </span>
   </div>
+  <form class="settings-modal">
+    <label for="tooltip">data-tooltip
+      <input type="text" id="tooltip" name="tooltip" placeholder="content goes here..">
+    </label>
+    <label for="positions">data-positions
+      <input type="text" id="positions" name="positions" placeholder="topRight|bottomLeft|right">
+    </label>
+    <label for="bgColor">data-bg-color
+      <input type="text" id="bgColor" name="bgColor" placeholder="valid css color value">
+    </label>
+    <label for="fgColor">data-fg-color
+      <input type="text" id="fgColor" name="fgColor" placeholder="valid css color value">
+    </label>
+    <label for="fontSize">data-font-size
+      <input type="text" id="fontSize" name="fontSize" placeholder="valid css font-size value">
+    </label>
+    <label for="arrowSize">data-arrow-size
+      <input type="text" id="arrowSize" name="arrowSize" placeholder="valid css font-size value">
+    </label>
+    <label for="arrow">data-arrow
+      <input type="text" id="arrow" name="arrow" placeholder="HTML entity code">
+    </label>
+    <label for="arrowDirection">data-arrow-direction
+      <input type="text" id="arrowDirection" name="arrowDirection" placeholder="top/right/bottom/left">
+    </label>
+    <label for="spacing">data-spacing
+      <input type="number" id="spacing" name="spacing" min="0" value="0">
+    </label>
+    <button type="submit">ok!</button>
+  </form>
+
 </body>
 
 </html>

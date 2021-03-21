@@ -1,6 +1,6 @@
 :root {
   --tooltip-base-fs: 1rem;
-  --tooltip-width: 18ch;
+  --tooltip-width: 25ch;
   --tooltip-padding: 0.3em;
   --tooltip-base-rotation: 180deg;
   --arrow-right-translate-start: translateX(-50%);
@@ -30,6 +30,8 @@
 body {
   margin: 0;
   background-color: rgb(216, 194, 149);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .container.x-left {
@@ -85,6 +87,8 @@ body {
   background: linear-gradient(var(--tooltip-bg-clr) 0% 100%);
   background-clip: padding-box;
   box-shadow: 2px 3px 4px 0px rgba(0, 0, 0, 0.53);
+  white-space: pre-wrap;
+  /* word-break: break-all; */
 }
 
 .tooltip::after {
@@ -93,7 +97,7 @@ body {
   bottom: -2px;
   left: -2px;
   right: -2px;
-  background: linear-gradient(45deg, var(--tooltip-bg-clr), var(--tooltip-fg-clr));
+  background: linear-gradient(20deg, var(--tooltip-bg-clr), var(--tooltip-fg-clr));
   content: '';
   z-index: -1;
   border-radius: 5px;
@@ -262,4 +266,71 @@ body {
   100% {
     transform: rotate(calc(var(--tooltip-base-rotation) + 45deg)) var(--arrow-translate-end);
   }
+}
+
+/* =========== Settings ============== */
+.settings {
+  width: 1.5rem;
+  display: inline-block;
+  padding: 0.1rem;
+  cursor: pointer;
+  transition: transform 0.5s cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+
+.settings:hover {
+  transform: rotate(180deg);
+}
+
+.settings-modal {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: rgb(255, 242, 226);
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.15), 0 10px 15px rgba(0, 0, 0, 0.2);
+  font-size: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  line-height: 1.5;
+}
+
+.open-settings .settings-modal {
+  display: block;
+  display: grid;
+}
+
+.settings-modal label {
+  display: block;
+  color: rgba(102, 102, 102, 0.794);
+  font-size: 1rem;
+}
+.settings-modal input {
+  transition: outline-offset 0.3s ease;
+  margin-top: 0.2rem;
+  color: rgb(20, 20, 20);
+}
+
+input,
+button {
+  font: inherit;
+  outline: 0;
+  border: 2px solid rgba(99, 105, 107, 0.13);
+  background: 0;
+  width: 100%;
+  padding: 0.2em 0.4em;
+  outline-offset: -2px;
+}
+
+.settings-modal button:hover {
+  background: rgb(80, 240, 120);
+  color: white;
+  cursor: pointer;
+}
+
+.settings-modal input:focus {
+  outline: 1px solid rgb(80, 240, 120);
 }
