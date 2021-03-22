@@ -1,5 +1,3 @@
-import addGlobalEventListener from './utils/addGlobalEventListener.js'
-
 const DEFAULT_SPACING = 0
 const POSITION_ORDER = ['topRight', 'topLeft', 'bottomLeft', 'bottomRight', 'top', 'bottom', 'left', 'right']
 const POSITION_TO_FUNCTION_MAP = {
@@ -13,13 +11,14 @@ const POSITION_TO_FUNCTION_MAP = {
   right: positionTooltipRight
 }
 
-//定位tooltip用的container
 const tooltipContainer = document.createElement('div')
 tooltipContainer.classList.add('tooltip-container')
 document.body.append(tooltipContainer)
 
-addGlobalEventListener('mouseover', '[data-tooltip]', (e) => {
-  if (e.target.dataset.tooltip.trim() === '') return
+document.addEventListener('mouseover', (e) => {
+  const element = e.target
+  if (!element.matches('[data-tooltip]')
+    || element.dataset.tooltip.trim() === '') return
 
   tooltipContainer.innerHTML = creatTooltipHTML(e.target.dataset)
   const tooltip = tooltipContainer.children[0]
@@ -50,46 +49,24 @@ function creatTooltipHTML({ tooltip, arrow = "&#10148;" } = {}) {
   </div>`
 }
 
-/**
- * mouseover時定位tooltip
- * @param {Element} tooltip mouseover時建立的tooltip
- * @param {Element} element mouseover到的element
- */
 function positionTooltip(tooltip, element) {
   const elementRect = element.getBoundingClientRect()
   const preferredPositions = (element.dataset.positions || '').split('|')
   const spacing = element.dataset.spacing ? parseInt(element.dataset.spacing) : DEFAULT_SPACING
   const positions = [...preferredPositions, ...POSITION_ORDER]
 
-  //找對應的定位function執行
   for (let i = 0; i < positions.length; i++) {
     const func = POSITION_TO_FUNCTION_MAP[positions[i]]
     if (func?.(tooltip, elementRect, spacing)) return
-    // 定位成功時要中斷迴圈
   }
 }
 
-/**
- * 檢查主要位置正確，但側邊超出時，調整側邊位置是否導致它的對邊超出spacing範圍
- * @param {Element} tooltip mouseover時建立的tooltip
- * @param {String} position 要修正的位置 上下左右
- * @param {Number} spacing  element.dataset.spacing 或 DEFAULT_SPACING
- * @returns {Boolean}
- */
 function isLessThanSpacing(tooltip, position, spacing) {
   const pos = getComputedStyle(tooltip)[position]
-  //把pos轉成數字和去掉後面的"px"
   const posValue = parseFloat(pos.substring(0, pos.length - 2))
   return posValue < spacing
 }
 
-/**
- * 把tooltip顯示在element上方
- * @param {Element} tooltip mouseover時建立的tooltip
- * @param {Object} elementRect mouseover到的element的位置
- * @param {String} spacing element.dataset.spacing 或 DEFAULT_SPACING
- * @returns {Boolean} 正確定位時回傳true，告訴positionTooltip中斷迴圈
- */
 function positionTooltipTop(tooltip, elementRect, spacing) {
   const tooltipRect = tooltip.getBoundingClientRect()
 
@@ -105,27 +82,19 @@ function positionTooltipTop(tooltip, elementRect, spacing) {
   positionTooltipArrow('bottom')
 
   if (bounds.right) {
-    //tooltip右邊超出範圍，把右邊位置拉進範圍
     tooltip.style.right = `${spacing}px`
-    //消除一開始定位tooltip所設的left值
     tooltip.style.left = 'initial'
-
-    //調整tooltip箭頭位置
     tooltip.style.setProperty('--left', `${tooltipRect.width - elementRect.width + spacing}px`)
 
-    //處理因為重設右邊位置造成左邊超出邊界的狀況
     if (isLessThanSpacing(tooltip, 'left', spacing)) {
       tooltip.style.left = `${spacing}px`
     }
   }
 
   if (bounds.left) {
-    //tooltip左邊超出範圍，把左邊位置拉近範圍
     tooltip.style.left = `${spacing}px`
-    //調整tooltip箭頭位置
     tooltip.style.setProperty('--left', `${elementRect.width - spacing}px`)
 
-    //處理因為重設左邊位置而造成右邊超出邊界的狀況
     if (isLessThanSpacing(tooltip, 'right', spacing)) {
       tooltip.style.right = `${spacing}px`
     }
@@ -134,13 +103,6 @@ function positionTooltipTop(tooltip, elementRect, spacing) {
   return true
 }
 
-/**
- * 把tooltip顯示在element下方
- * @param {Element} tooltip mouseover時建立的tooltip
- * @param {Object} elementRect mouseover到的element的位置
- * @param {String} spacing element.dataset.spacing 或 DEFAULT_SPACING
- * @returns {Boolean} 正確定位時回傳true，告訴positionTooltip中斷迴圈
- */
 function positionTooltipBottom(tooltip, elementRect, spacing) {
   const tooltipRect = tooltip.getBoundingClientRect()
 
@@ -176,13 +138,6 @@ function positionTooltipBottom(tooltip, elementRect, spacing) {
   return true
 }
 
-/**
- * 把tooltip顯示在element左方
- * @param {Element} tooltip mouseover時建立的tooltip
- * @param {Object} elementRect mouseover到的element的位置
- * @param {String} spacing element.dataset.spacing 或 DEFAULT_SPACING
- * @returns {Boolean} 正確定位時回傳true，告訴positionTooltip中斷迴圈
- */
 function positionTooltipLeft(tooltip, elementRect, spacing) {
   const tooltipRect = tooltip.getBoundingClientRect()
   tooltip.style.top = `${elementRect.top + elementRect.height / 2 - tooltipRect.height / 2}px`
@@ -212,13 +167,6 @@ function positionTooltipLeft(tooltip, elementRect, spacing) {
   return true
 }
 
-/**
- * 把tooltip顯示在element右方
- * @param {Element} tooltip mouseover時建立的tooltip
- * @param {Object} elementRect mouseover到的element的位置
- * @param {String} spacing element.dataset.spacing 或 DEFAULT_SPACING
- * @returns {Boolean} 正確定位時回傳true，告訴positionTooltip中斷迴圈
- */
 function positionTooltipRight(tooltip, elementRect, spacing) {
   const tooltipRect = tooltip.getBoundingClientRect()
   tooltip.style.top = `${elementRect.top + elementRect.height / 2 - tooltipRect.height / 2}px`
@@ -248,12 +196,6 @@ function positionTooltipRight(tooltip, elementRect, spacing) {
   return true
 }
 
-/**
- * 檢查最初定位的位置是否超出邊界
- * @param {Element} tooltip 其實是tooltip
- * @param {Number} spacing element.dataset.spacing 或 DEFAULT_SPACING
- * @returns {Object} 回傳值告訴定位functions最初定位是否超出邊界
- */
 function isOutOfBound(tooltip, spacing) {
   const rect = tooltip.getBoundingClientRect()
   const containerRect = tooltipContainer.getBoundingClientRect()
@@ -266,10 +208,6 @@ function isOutOfBound(tooltip, spacing) {
   }
 }
 
-/**
- * 重置tooltip方位設定值
- * @param {Element} tooltip mouseover時建立的tooltip
- */
 function resetTooltipPosition(tooltip) {
   tooltip.style.top = 'initial'
   tooltip.style.left = 'initial'
@@ -341,7 +279,6 @@ function positionTooltipBottomLeft(tooltip, elementRect, spacing) {
 
   return true
 }
-
 
 function positionTooltipArrow(direction) {
   const arrow = tooltipContainer.querySelector(`.tooltip-arrow-${direction}`)

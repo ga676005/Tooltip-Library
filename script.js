@@ -26,36 +26,22 @@ document.addEventListener("keydown", (e) => {
 const settings = document.querySelector('.settings')
 const form = document.querySelector('.settings-modal')
 const element = document.querySelector('[data-tooltip]')
-
+const properties = ['spacing', 'tooltip', 'bgColor', 'fgColor', 'positions', 'fontSize', 'arrowSize', 'arrow', 'arrowDirection']
 
 settings.addEventListener('click', e => {
   document.body.classList.add('open-settings')
-  const { spacing, positions, tooltip, bgColor, fgColor, fontSize, arrowSize, arrow, arrowDirection } = element.dataset
 
-  form.querySelector('#spacing').value = spacing
-  form.querySelector('#positions').value = positions
-  form.querySelector('#tooltip').value = tooltip
-  form.querySelector('#bgColor').value = bgColor
-  form.querySelector('#fgColor').value = fgColor
-  form.querySelector('#fontSize').value = fontSize
-  form.querySelector('#arrowSize').value = arrowSize
-  form.querySelector('#arrow').value = arrow
-  form.querySelector('#arrowDirection').value = arrowDirection
-
+  properties.forEach(p => {
+    form.querySelector(`#${p}`).value = element.dataset[p]
+  })
 })
 
 form.addEventListener('submit', e => {
   e.preventDefault()
 
-  element.dataset.spacing = form.querySelector('#spacing').value
-  element.dataset.positions = form.querySelector('#positions').value
-  element.dataset.tooltip = form.querySelector('#tooltip').value
-  element.dataset.bgColor = form.querySelector('#bgColor').value
-  element.dataset.fgColor = form.querySelector('#fgColor').value
-  element.dataset.fontSize = form.querySelector('#fontSize').value
-  element.dataset.arrowSize = form.querySelector('#arrowSize').value
-  element.dataset.arrow = form.querySelector('#arrow').value
-  element.dataset.arrowDirection = form.querySelector('#arrowDirection').value
+  properties.forEach(p => {
+    element.dataset[p] = form.querySelector(`#${p}`).value
+  })
 
   document.body.classList.remove('open-settings')
 })
