@@ -133,21 +133,19 @@ body {
   background-clip: text;
   -webkit-background-clip: text;
   background-repeat: no-repeat;
-  background-size: 200px 200px;
+  background-size: var(--bg-size) var(--bg-size);
   background-position-x: -200px;
 
-  background-image: linear-gradient(
-    -90deg,
-    transparent,
-    var(--tooltip-bg-clr) 20% 80%,
-    transparent
-  );
+  background-image: linear-gradient(90deg, transparent, var(--tooltip-bg-clr) 30% 70%, transparent);
 
   animation-duration: 2.5s;
   animation-iteration-count: infinite;
   animation-duration: normal;
   animation-timing-function: cubic-bezier(0, 0, 0.2, 1) ease-in-out;
-  animation-play-state: paused;
+  animation-play-state: running;
+
+  --bg-size: calc(var(--tooltip-arrow-fs) * 10);
+  line-height: 1;
 }
 
 .animate-tooltip {
@@ -198,10 +196,10 @@ body {
 
 @keyframes flashArrow {
   0% {
-    background-position-x: -200px;
+    background-position-x: calc(var(--bg-size) * -1);
   }
   100% {
-    background-position-x: 50px;
+    background-position-x: calc(var(--tooltip-arrow-fs) * 2.5);
   }
 }
 
