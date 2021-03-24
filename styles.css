@@ -15,11 +15,13 @@
   --arrow-translate-start: var(--arrow-left-translate-start);
   --arrow-translate-end: var(--arrow-left-translate-end);
 
+  /* cannot set animation name directly through js, so I create reference here */
   --flash-arrow-up: flash-arrow-up;
   --flash-arrow-down: flash-arrow-down;
   --flash-arrow-right: flash-arrow-right;
   --flash-arrow-left: flash-arrow-left;
 }
+
 *,
 ::before,
 ::after {
@@ -146,12 +148,11 @@ body {
     transparent
   );
 
-  animation-duration: 4s;
+  animation-duration: var(--animate-duration);
   animation-iteration-count: infinite;
   animation-duration: normal;
   animation-timing-function: cubic-bezier(0, 0, 0.2, 1) ease-in-out;
   animation-play-state: paused;
-  animation-play-state: running;
 
   --bg-size: calc(var(--tooltip-arrow-fs) * 3);
   line-height: 1;

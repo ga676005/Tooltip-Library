@@ -359,19 +359,30 @@ function setupTooltipStyle(element) {
   const degree = `${ARROW_ROTATE_DEGREE[arrowDirection]}deg`
   const start = `var(--arrow-${arrowDirection}-translate-start)`
   const end = `var(--arrow-${arrowDirection}-translate-end)`
-
-  tooltipContainer.style.setProperty('--tooltip-bg-clr', bgColor ? bgColor : "#ffffff")
-  tooltipContainer.style.setProperty('--tooltip-fg-clr', fgColor ? fgColor : "#000000")
-  tooltipContainer.style.setProperty('--tooltip-fs', fontSize ? fontSize : "1rem")
-  tooltipContainer.style.setProperty('--tooltip-arrow-fs', arrowSize ? arrowSize : "1.5rem")
-  tooltipContainer.style.setProperty('--tooltip-base-rotation', degree)
-  tooltipContainer.style.setProperty('--tooltip-spacing', `${spacing / 50}rem`)
-  tooltipContainer.style.setProperty('--arrow-translate-start', start)
-  tooltipContainer.style.setProperty('--arrow-translate-end', end)
-
-
   const flashArrow = `flash-arrow-${arrowDirection}`
   const bgDegree = `${ARROW_ROTATE_DEGREE[arrowDirection] - 90}deg`
-  tooltipContainer.style.setProperty('--flash-arrow', flashArrow)
-  tooltipContainer.style.setProperty('--bg-degree', bgDegree)
+  const arrow = tooltipContainer.querySelector('.tooltip-arrow')
+  const arrowFontSize = parseFloat(getComputedStyle(arrow).getPropertyValue('font-size'))
+  const defaultAnimateDuration = 4
+  const animateDuration = (arrowFontSize / 16) < defaultAnimateDuration
+    ? defaultAnimateDuration + 's'
+    : (arrowFontSize / 16) + 's'
+
+  const customProperties = {
+    '--tooltip-bg-clr': bgColor ? bgColor : "#ffffff",
+    '--tooltip-fg-clr': fgColor ? fgColor : "#000000",
+    '--tooltip-fs': fontSize ? fontSize : "1rem",
+    '--tooltip-arrow-fs': arrowSize ? arrowSize : "1.5rem",
+    '--tooltip-base-rotation': degree,
+    '--tooltip-spacing': `${spacing / 50}rem`,
+    '--arrow-translate-start': start,
+    '--arrow-translate-end': end,
+    '--flash-arrow': flashArrow,
+    '--bg-degree': bgDegree,
+    '--animate-duration': animateDuration
+  }
+
+  for (const [property, value] of Object.entries(customProperties)) {
+    tooltipContainer.style.setProperty(property, value)
+  }
 }
