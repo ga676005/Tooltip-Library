@@ -351,12 +351,12 @@ function positionTooltipArrow(direction) {
 function setupTooltipStyle(element) {
   const { bgColor, fgColor, fontSize, arrowSize, spacing = "0", arrowDirection = "right" } = element.dataset
   const ARROW_ROTATE_DEGREE = {
-    up: "90deg",
-    down: "270deg",
-    right: "0deg",
-    left: "180deg"
+    up: 90,
+    down: 270,
+    right: 0,
+    left: 180
   }
-  const degree = ARROW_ROTATE_DEGREE[arrowDirection]
+  const degree = `${ARROW_ROTATE_DEGREE[arrowDirection]}deg`
   const start = `var(--arrow-${arrowDirection}-translate-start)`
   const end = `var(--arrow-${arrowDirection}-translate-end)`
 
@@ -368,4 +368,10 @@ function setupTooltipStyle(element) {
   tooltipContainer.style.setProperty('--tooltip-spacing', `${spacing / 50}rem`)
   tooltipContainer.style.setProperty('--arrow-translate-start', start)
   tooltipContainer.style.setProperty('--arrow-translate-end', end)
+
+
+  const flashArrow = `flash-arrow-${arrowDirection}`
+  const bgDegree = `${ARROW_ROTATE_DEGREE[arrowDirection] - 90}deg`
+  tooltipContainer.style.setProperty('--flash-arrow', flashArrow)
+  tooltipContainer.style.setProperty('--bg-degree', bgDegree)
 }
