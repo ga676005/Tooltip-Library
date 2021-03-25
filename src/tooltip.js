@@ -280,6 +280,7 @@ function positionTooltipBottomLeft(tooltip, elementRect, spacing) {
   return true
 }
 
+
 function positionTooltipArrow(direction) {
   const arrow = tooltipContainer.querySelector(`.tooltip-arrow-${direction}`)
   arrow.classList.add('animate-tooltip')
@@ -288,21 +289,38 @@ function positionTooltipArrow(direction) {
 function setupTooltipStyle(element) {
   const { bgColor, fgColor, fontSize, arrowSize, spacing = "0", arrowDirection = "right" } = element.dataset
   const ARROW_ROTATE_DEGREE = {
-    up: "90deg",
-    down: "270deg",
-    right: "0deg",
-    left: "180deg"
+    up: 90,
+    down: 270,
+    right: 0,
+    left: 180
   }
-  const degree = ARROW_ROTATE_DEGREE[arrowDirection]
+  const degree = `${ARROW_ROTATE_DEGREE[arrowDirection]}deg`
   const start = `var(--arrow-${arrowDirection}-translate-start)`
   const end = `var(--arrow-${arrowDirection}-translate-end)`
+  const flashArrow = `flash-arrow-${arrowDirection}`
+  const bgDegree = `${ARROW_ROTATE_DEGREE[arrowDirection] - 90}deg`
+  const arrow = tooltipContainer.querySelector('.tooltip-arrow')
+  const arrowFontSize = parseFloat(getComputedStyle(arrow).getPropertyValue('font-size'))
+  const defaultAnimateDuration = 4
+  const animateDuration = (arrowFontSize / 16) < defaultAnimateDuration
+    ? defaultAnimateDuration + 's'
+    : (arrowFontSize / 16) + 's'
 
-  tooltipContainer.style.setProperty('--tooltip-bg-clr', bgColor ? bgColor : "#ffffff")
-  tooltipContainer.style.setProperty('--tooltip-fg-clr', fgColor ? fgColor : "#000000")
-  tooltipContainer.style.setProperty('--tooltip-fs', fontSize ? fontSize : "1rem")
-  tooltipContainer.style.setProperty('--tooltip-arrow-fs', arrowSize ? arrowSize : "1.5rem")
-  tooltipContainer.style.setProperty('--tooltip-base-rotation', degree)
-  tooltipContainer.style.setProperty('--tooltip-spacing', `${spacing / 50}rem`)
-  tooltipContainer.style.setProperty('--arrow-translate-start', start)
-  tooltipContainer.style.setProperty('--arrow-translate-end', end)
+  const customProperties = {
+    '--tooltip-bg-clr': bgColor ? bgColor : "#ffffff",
+    '--tooltip-fg-clr': fgColor ? fgColor : "#000000",
+    '--tooltip-fs': fontSize ? fontSize : "1rem",
+    '--tooltip-arrow-fs': arrowSize ? arrowSize : "1.5rem",
+    '--tooltip-base-rotation': degree,
+    '--tooltip-spacing': `${spacing / 50}rem`,
+    '--arrow-translate-start': start,
+    '--arrow-translate-end': end,
+    '--flash-arrow': flashArrow,
+    '--bg-degree': bgDegree,
+    '--animate-duration': animateDuration
+  }
+
+  for (const [property, value] of Object.entries(customProperties)) {
+    tooltipContainer.style.setProperty(property, value)
+  }
 }
