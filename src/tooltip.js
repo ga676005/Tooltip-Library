@@ -69,6 +69,7 @@ function isLessThanSpacing(tooltip, position, spacing) {
 
 function positionTooltipTop(tooltip, elementRect, spacing) {
   const tooltipRect = tooltip.getBoundingClientRect()
+  const arrowToShow = 'bottom'
 
   tooltip.style.top = `${elementRect.top - tooltipRect.height - spacing}px`
   tooltip.style.left = `${elementRect.left + elementRect.width / 2 - tooltipRect.width / 2}px`
@@ -79,7 +80,7 @@ function positionTooltipTop(tooltip, elementRect, spacing) {
     return false
   }
 
-  positionTooltipArrow('bottom')
+  showTooltipArrow(arrowToShow)
 
   if (bounds.right) {
     tooltip.style.right = `${spacing}px`
@@ -89,6 +90,7 @@ function positionTooltipTop(tooltip, elementRect, spacing) {
     if (isLessThanSpacing(tooltip, 'left', spacing)) {
       tooltip.style.left = `${spacing}px`
     }
+    repositionArrow(tooltip, arrowToShow, 'justify-self', "end")
   }
 
   if (bounds.left) {
@@ -98,6 +100,8 @@ function positionTooltipTop(tooltip, elementRect, spacing) {
     if (isLessThanSpacing(tooltip, 'right', spacing)) {
       tooltip.style.right = `${spacing}px`
     }
+
+    repositionArrow(tooltip, arrowToShow, 'justify-self', "start")
   }
 
   return true
@@ -105,6 +109,7 @@ function positionTooltipTop(tooltip, elementRect, spacing) {
 
 function positionTooltipBottom(tooltip, elementRect, spacing) {
   const tooltipRect = tooltip.getBoundingClientRect()
+  const arrowToShow = "top"
 
   tooltip.style.top = `${elementRect.bottom + spacing}px`
   tooltip.style.left = `${elementRect.left + elementRect.width / 2 - tooltipRect.width / 2}px`
@@ -116,7 +121,7 @@ function positionTooltipBottom(tooltip, elementRect, spacing) {
     return false
   }
 
-  positionTooltipArrow('top')
+  showTooltipArrow(arrowToShow)
 
   if (bounds.right) {
     tooltip.style.right = `${spacing}px`
@@ -125,6 +130,7 @@ function positionTooltipBottom(tooltip, elementRect, spacing) {
     if (isLessThanSpacing(tooltip, 'left', spacing)) {
       tooltip.style.left = `${spacing}px`
     }
+    repositionArrow(tooltip, arrowToShow, 'justify-self', "end")
   }
 
   if (bounds.left) {
@@ -133,6 +139,7 @@ function positionTooltipBottom(tooltip, elementRect, spacing) {
     if (isLessThanSpacing(tooltip, 'right', spacing)) {
       tooltip.style.right = `${spacing}px`
     }
+    repositionArrow(tooltip, arrowToShow, 'justify-self', "start")
   }
 
   return true
@@ -143,13 +150,14 @@ function positionTooltipLeft(tooltip, elementRect, spacing) {
   tooltip.style.top = `${elementRect.top + elementRect.height / 2 - tooltipRect.height / 2}px`
   tooltip.style.left = `${elementRect.left - tooltipRect.width - spacing}px`
   const bounds = isOutOfBound(tooltip, spacing)
+  const arrowToShow = "right"
 
   if (bounds.left) {
     resetTooltipPosition(tooltip)
     return false
   }
 
-  positionTooltipArrow('right')
+  showTooltipArrow(arrowToShow)
 
   if (bounds.bottom) {
     tooltip.style.bottom = `${spacing}px`
@@ -157,12 +165,14 @@ function positionTooltipLeft(tooltip, elementRect, spacing) {
     if (isLessThanSpacing(tooltip, 'top', spacing)) {
       tooltip.style.top = `${spacing}px`
     }
+    repositionArrow(tooltip, arrowToShow, "align-self", "end")
   }
   if (bounds.top) {
     tooltip.style.top = `${spacing}px`
     if (isLessThanSpacing(tooltip, 'bottom', spacing)) {
       tooltip.style.bottom = `${spacing}px`
     }
+    repositionArrow(tooltip, arrowToShow, "align-self", "start")
   }
   return true
 }
@@ -172,13 +182,14 @@ function positionTooltipRight(tooltip, elementRect, spacing) {
   tooltip.style.top = `${elementRect.top + elementRect.height / 2 - tooltipRect.height / 2}px`
   tooltip.style.left = `${elementRect.right + spacing}px`
   const bounds = isOutOfBound(tooltip, spacing)
+  const arrowToShow = "left"
 
   if (bounds.right) {
     resetTooltipPosition(tooltip)
     return false
   }
 
-  positionTooltipArrow('left')
+  showTooltipArrow(arrowToShow)
 
   if (bounds.bottom) {
     tooltip.style.bottom = `${spacing}px`
@@ -186,12 +197,14 @@ function positionTooltipRight(tooltip, elementRect, spacing) {
     if (isLessThanSpacing(tooltip, 'top', spacing)) {
       tooltip.style.top = `${spacing}px`
     }
+    repositionArrow(tooltip, arrowToShow, 'align-self', "end")
   }
   if (bounds.top) {
     tooltip.style.top = `${spacing}px`
     if (isLessThanSpacing(tooltip, 'bottom', spacing)) {
       tooltip.style.bottom = `${spacing}px`
     }
+    repositionArrow(tooltip, arrowToShow, 'align-self', "start")
   }
   return true
 }
@@ -226,7 +239,7 @@ function positionTooltipTopLeft(tooltip, elementRect, spacing) {
     resetTooltipPosition(tooltip)
     return false
   }
-  positionTooltipArrow('bottom-right')
+  showTooltipArrow('bottom-right')
 
   return true
 }
@@ -242,7 +255,7 @@ function positionTooltipTopRight(tooltip, elementRect, spacing) {
     resetTooltipPosition(tooltip)
     return false
   }
-  positionTooltipArrow('bottom-left')
+  showTooltipArrow('bottom-left')
 
   return true
 }
@@ -259,7 +272,7 @@ function positionTooltipBottomRight(tooltip, elementRect, spacing) {
 
     return false
   }
-  positionTooltipArrow('top-left')
+  showTooltipArrow('top-left')
 
   return true
 }
@@ -275,13 +288,12 @@ function positionTooltipBottomLeft(tooltip, elementRect, spacing) {
     resetTooltipPosition(tooltip)
     return false
   }
-  positionTooltipArrow('top-right')
+  showTooltipArrow('top-right')
 
   return true
 }
 
-
-function positionTooltipArrow(direction) {
+function showTooltipArrow(direction) {
   const arrow = tooltipContainer.querySelector(`.tooltip-arrow-${direction}`)
   arrow.classList.add('animate-tooltip')
 }
@@ -301,7 +313,7 @@ function setupTooltipStyle(element) {
   const bgDegree = `${ARROW_ROTATE_DEGREE[arrowDirection] - 90}deg`
   const arrow = tooltipContainer.querySelector('.tooltip-arrow')
   const arrowFontSize = parseFloat(getComputedStyle(arrow).getPropertyValue('font-size'))
-  const defaultAnimateDuration = 4
+  const defaultAnimateDuration = 3.5
   const animateDuration = (arrowFontSize / 16) < defaultAnimateDuration
     ? defaultAnimateDuration + 's'
     : (arrowFontSize / 16) + 's'
@@ -323,4 +335,8 @@ function setupTooltipStyle(element) {
   for (const [property, value] of Object.entries(customProperties)) {
     tooltipContainer.style.setProperty(property, value)
   }
+}
+
+function repositionArrow(tooltip, arrowDirection, property, value) {
+  tooltip.parentElement.querySelector(`.tooltip-arrow-${arrowDirection}`).style.setProperty(property, value)
 }
