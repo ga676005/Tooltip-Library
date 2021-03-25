@@ -29,7 +29,7 @@ addGlobalEventListener('mouseover', '[data-tooltip]', (e) => {
   e.target.addEventListener(
     'mouseleave',
     () => {
-      // tooltip.remove()
+      tooltip.remove()
     },
     { once: true }
   )
@@ -116,6 +116,8 @@ function positionTooltipTop(tooltip, elementRect, spacing) {
     if (isLessThanSpacing(tooltip, 'left', spacing)) {
       tooltip.style.left = `${spacing}px`
     }
+
+    //調整箭頭位置
     repositionArrow(tooltip, arrowToShow, 'justify-self', "end")
   }
 
@@ -129,6 +131,8 @@ function positionTooltipTop(tooltip, elementRect, spacing) {
     if (isLessThanSpacing(tooltip, 'right', spacing)) {
       tooltip.style.right = `${spacing}px`
     }
+
+    //調整箭頭位置
     repositionArrow(tooltip, arrowToShow, 'justify-self', "start")
   }
 
@@ -352,12 +356,19 @@ function positionTooltipBottomLeft(tooltip, elementRect, spacing) {
   return true
 }
 
-
+/**
+ * 顯示tooltip箭頭
+ * @param {String} direction 要顯示的箭頭位置
+ */
 function showTooltipArrow(direction) {
   const arrow = tooltipContainer.querySelector(`.tooltip-arrow-${direction}`)
   arrow.classList.add('animate-tooltip')
 }
 
+/**
+ * 獲取物件的dataset，設定tooltip的外觀
+ * @param {Object} element 要顯示tooltip的物件
+ */
 function setupTooltipStyle(element) {
   const { bgColor, fgColor, fontSize, arrowSize, spacing = "0", arrowDirection = "right" } = element.dataset
   const ARROW_ROTATE_DEGREE = {
